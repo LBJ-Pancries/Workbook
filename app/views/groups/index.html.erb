@@ -1,18 +1,25 @@
-<table class="table table-bover">
-  <thead>
-    <tr>
-      <td>#</td>
-      <td>Title</td>
-      <td>Description</td>
-    </tr>
-  </thead>
-  <tbody>
-    <% @groups.each do |group| %>
+<div class="col-md-12">
+  <table class="table table-bover">
+    <div class="group">
+      <%= link_to("New group", new_group_path, class: "btn btn-primary pull-right") %>
+    </div>
+    <thead>
       <tr>
         <td>#</td>
-        <td><%= group.title %></td>
-        <td><%= group.description %></td>
+        <td>Title</td>
+        <td>Description</td>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @groups.each do |group| %>
+        <tr>
+          <td>#</td>
+          <td><%= link_to(group.title, group_path(group))%></td>
+          <td><%= group.description %></td>
+          <td><%= link_to("Edit", edit_group_path(group), class: "btn btn-sm btn-default") %></td>
+          <td><%= link_to("Delete", group_path(group), class: "btn btn-sm btn-default", method: :delete, data: { confirm: "Are you sure?" }) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
