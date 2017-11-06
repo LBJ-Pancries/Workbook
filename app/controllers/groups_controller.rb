@@ -1,14 +1,16 @@
 class GroupsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create]
   def index
-    @groups = Group.all
+    @groups = Group.all.order("created_at DESC")
   end
 
   def new
-    @group = Group.new
+    @group = current_user.groups.build
   end
 
   def create
-    @group = Group.new(group_params)
+    @group = current_user.groups.build(group_params)
+
     if @group.save
       redirect_to groups_path
     else
