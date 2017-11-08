@@ -1,24 +1,34 @@
-# README
+#Rails101
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+###Add Bootstrap gem
 
-Things you may want to cover:
+  `git checkout -b Add_bootstrap_to_project`
 
-* Ruby version
+  `subl .`
 
-* System dependencies
+  Edit Gemfile
 
-* Configuration
+  ```
+  gem 'bootstrap-sass'
+  ```
 
-* Database creation
+  `bundle install`
 
-* Database initialization
+  重开`rails s`
 
-* How to run the test suite
+  Rename`mv app/assets/stylesheets/application.css app/assets/stylesheets/application.scss`
 
-* Services (job queues, cache servers, search engines, etc.)
+  修改app/assets/stylesheets/application.scss
 
-* Deployment instructions
+  ```
+  @import "bootstrap-sprockets";
+  @import "bootstrap";
+  ```
 
-* ...
+  保存（Save）
+
+  `git add .`
+
+  `git commit -m "add bootstrap to project"`
+
+  ***
