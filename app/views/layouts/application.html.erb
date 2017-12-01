@@ -29,7 +29,9 @@
         <li><a href="#">Github</a></li>
         <li><a href="#">Email</a></li>
       </ul>
-      <p class="sign_in">Admin Login</p>
+      <% if !user_signed_in? %>
+        <p class="sign_in">Admin Login</p>
+      <% end %>
     </div>
 
     <div id="main_content">
@@ -41,10 +43,18 @@
         <% else %>
           <%= link_to "Back to All Posts", root_path %>
         <% end %>
-        <div class="buttons">
-          <button class="button"><%= link_to "New Post", new_post_path %></button>
-          <button class="button">Log Out</button>
-        </div>
+
+        <% if !current_user %>
+          <div class="buttons">
+            <button class="button"><%= link_to "注册", new_user_registration_path %></button>
+            <button class="button"><%= link_to "登录", new_user_session_path %></button>
+          </div>
+        <% else %>
+          <div class="buttons">
+            <button class="button"><%= link_to "New Post", new_post_path %></button>
+            <button class="button"><%= link_to "Log Out", destroy_user_session_path, method: :delete %></button>
+          </div>
+        <% end %>
       </div>
 
       <% flash.each do |name, msg| %>
