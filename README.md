@@ -4,38 +4,56 @@ date: 2017-11-17 16:14:02
 tags:
 ---
 ## 1. Create new projects
+
 `cd 12_in_12_challenge`
+
 `rails new workout_log`
+
 `cd workout_log`
 
 `git init`
+
 `git add .`
+
 `git commit -m "Initial Commit"`
+
 `rails s`
 
 localhost:3000
+
 ## 2. Initial Commit & Workout Model
-`rails g model workout date:datetime workout:string mood:string length:string`
+
+`rails g model workout date:datetime workout:string mood:string
+length:string`
+
 `rake db:migrate`
+
 `git add .`
+
 `git commit -am "Initial Commit & Workout Model"`
+
 ## 3. Workout controller & routes
+
 `rails g controller workouts`
+
 Edit config/routes.rb
 ```
 resources :workouts
 root 'workouts#index'
 ```
-Edit app/controller/workouts_controller.rb_
+
+Edit app/controller/workouts_controller.rb
 ```
 def index
 end
 ```
 
 `git add .`
+
 `git commit -am "Workout controller & routes"`
 
 ## 4. Add App Gems & workout Forms/Views
+
 Edit Gemfile
 ```
 gem 'haml'
@@ -44,8 +62,11 @@ gem 'bootstrap-sass'
 ```
 
 `bundle install`
+
 重开`rails s`
-rename app/assets/stylesheet/application.css to app/assets/stylesheet/application.scss
+
+rename `app/assets/stylesheet/application.css` to `app/assets/stylesheet/application.scss`
+
 Edit app/assets/stylesheet/application.scss
 ```
 @import "bootstrap-sprockets";
@@ -61,10 +82,12 @@ Edit app/views/assets/javascripts/application.js
 `rails generate simple_form:install --bootstrap`
 
 `touch app/views/welcome/index.html.haml`
+
 Edit app/views/welcome/index.html.haml
 ```
 %h1 This is the Workouts#index placeholder
 ```
+
 Edit app/controller/workouts_controller.rb_
 ```
 ...
@@ -88,6 +111,7 @@ end
 
 `touch app/views/workout/_form.html.haml`
 
+Edit app/views/workout/form.html.haml
 ```
 = simple_form_for(@workout, html: { class: 'form-horizontal' }) do |f|
     = f.input :date, label: "Date"
@@ -99,6 +123,7 @@ end
 ```
 
 `touch app/views/workout/new.html.haml`
+
 Edit app/views/workout/new.html.haml
 ```
 %h1 New Workout
@@ -107,6 +132,7 @@ Edit app/views/workout/new.html.haml
 ```
 
 `touch app/views/workout/show.html.haml`
+
 Edit app/views/workout/show.html.haml
 ```
 #workout
@@ -115,6 +141,7 @@ Edit app/views/workout/show.html.haml
     %p= @workout.mood
     %p= @workout.length
 ```
+
 Edit app/controller/workouts_controller.rb_
 ```
 before_action :find_workout, only:  [:show, :edit, :update, :destroy]
@@ -135,9 +162,11 @@ end
 ```
 
 `git add .`
+
 `git commit -am "Add App Gems & workout Forms/Views"`
 
 ## 5. Loop workouts on Workouts#Index
+
 Edit app/views/workout/index.html.erb
 ```
 - @workouts.each do |workout|
@@ -159,9 +188,11 @@ end
 ```
 
 `git add .`
+
 `git commit -am "Loop workouts on Workouts#Index"`
 
 ## 6. Add edit & destroy ability
+
 Edit app/controller/workouts_controller.rb_
 ```
 before_action :find_workout, only:  [:show, :edit, :update, :destroy]
@@ -185,6 +216,7 @@ before_action :find_workout, only:  [:show, :edit, :update, :destroy]
     end
 end
 ```
+
 Edit app/views/workout/show.html.haml
 ```
 #workout
@@ -195,13 +227,16 @@ Edit app/views/workout/show.html.haml
 = link_to "Back", root_path |
 = link_to "Edit", edit_workout_path(@workout)
 ```
+
 `touch app/views/workout/edit.html.haml`
+
 Edit app/views/workout/edit.html.haml
 ```
 %h1 Edit Workout
 = render 'form'
 = link_to "Cancel", root_path
 ```
+
 Edit app/controller/workouts_controller.rb_
 ```
 def destroy
@@ -209,6 +244,7 @@ def destroy
     redirect_to root_path
 end
 ```
+
 Edit app/views/workout/show.html.haml
 ```
 #workout
@@ -220,9 +256,13 @@ Edit app/views/workout/show.html.haml
 = link_to "Edit", edit_workout_path(@workout) |
 = link_to "Delete", workout_path(@workout), method: :delete, data: { confirm: "Are you sure?" }
 ```
+
 `git add .`
+
 `git commit -am "Add edit & destroy ability"`
+
 ## controller 优化参考
+
 ```
 class WorkoutsController < ApplicationController
   def index
@@ -260,6 +300,7 @@ class WorkoutsController < ApplicationController
   end
 end
 ```
+
 优化
 ```
 class WorkoutsController < ApplicationController
@@ -305,7 +346,9 @@ class WorkoutsController < ApplicationController
   end
 end
 ```
+
 ## 7. Basic structure
+
 Edit app/views/layouts/application.html.haml
 ```
 !!!
@@ -340,23 +383,32 @@ Edit app/views/layouts/application.html.haml
     .container
         = yield
 ```
+
 `git add .`
+
 `git commit -am "Basic structure"`
+
 ## 8. Add exercises to workouts
+
 `rails g model exercise name:string sets:integer reps:integer workout:references`
+
 `rake db:migrate`
+
 Edit app/models/workout.rb
 ```
 has_many :exercises
 ```
+
 Edit config/routes.rb
 ```
     resources :workouts do
         resources :exercises
     end
 ```
+
 `rails g controller exercises`
-Edit app/controller/exercises_controller.rb_
+
+Edit app/controller/exercises_controller.rb
 ```
 def create
     @workout = Workout.find(params[:workout_id])
@@ -364,9 +416,12 @@ def create
     redirect_to workout_path(@workout)
 end
 ```
+
 `touch app/views/exercises/_exercise.html.haml`
+
 `touch app/views/exercises/_form.html.haml`
-Edit app/views/exercises/_form.html.haml_
+
+Edit app/views/exercises/form.html.haml
 ```
 = simple_form_for([@workout, @workout.exercises.build]) do |f|
     = f.input :name, input_html: { class: "form-control" }
@@ -375,12 +430,14 @@ Edit app/views/exercises/_form.html.haml_
     %br/
     = f.button :submit
 ```
-Edit app/views/exercises/_exercise.html.haml_
+
+Edit app/views/exercises/exercise.html.haml
 ```
 %p= exercise.name
 %p= exercise.sets
 %p= exercise.reps
 ```
+
 Edit app/views/workout/show.html.haml
 ```
 #workout
@@ -388,25 +445,30 @@ Edit app/views/workout/show.html.haml
     %p= @workout.workout
     %p= @workout.mood
     %p= @workout.length
-''
+
 #exercises
     %h2 Exercises
     = render @workout.exercises
-''
+
     %h3 Add an exercise
     = render "exercises/form"
-''
+
 = link_to "Back", root_path |
 = link_to "Edit", edit_workout_path(@workout)
 = link_to "Delete", workout_path(@workout), method: :delete, data: { confirm: "Are you sure?" }
 ```
+
 Edit app/models/workout.rb
 ```
 has_many :exercises, dependent: :destroy
 ```
+
 `git add .`
+
 `git commit -am "Add exercises to workouts"`
+
 ## 9. Change DateTime Formatting
+
 Edit app/views/workout/index.html.erb
 ```
 - @workouts.each do |workout|
@@ -414,9 +476,13 @@ Edit app/views/workout/index.html.erb
 +    %h2= link_to workout.date.strftime("%A %B %d"), workout
     %h3= workout.workout
 ```
+
 `git add .`
+
 `git commit -am "Change DateTime Formatting"`
+
 ## 10. A little bit of styling
+
 Edit app/assets/stylesheets/application.html.haml
 ```
 ...
@@ -430,7 +496,7 @@ body {
     background:      -o-linear-gradient(90deg, #616161 10%, #9bc5c3 90%); /* Opera 11.10+ */
     background:         linear-gradient(90deg, #616161 10%, #9bc5c3 90%); /* W3C */
 }
-''
+
 .navbar-default {
     background: rgba(250, 250, 250, 0.5);
     -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.2);
@@ -439,6 +505,7 @@ body {
     border-radius: 0;
 }
 ```
+
 Edit app/views/workout/index.html.erb
 ```
 #index_workouts
@@ -446,6 +513,7 @@ Edit app/views/workout/index.html.erb
         %h2= link_to workout.date.strftime("%A %B %d"), workout
         %h3= workout.workout
 ```
+
 Edit app/assets/stylesheets/application.html.haml
 ```
 ...
@@ -500,4 +568,5 @@ Edit app/views/workout/index.html.erb
 ```
 
 `git add .`
+
 `git commit -am "A little bit of styling"`
