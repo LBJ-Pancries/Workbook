@@ -9,7 +9,7 @@ class PinsController < ApplicationController
   end
 
   def create
-    @pin = current_user.pins.build(params.require(:pin).permit(:title, :description))
+    @pin = current_user.pins.build(pin_params)
     @pin.save
     redirect_to @pin, notice: "Pin was Successfully create!"
   end
@@ -24,7 +24,7 @@ class PinsController < ApplicationController
 
   def update
     @pin = Pin.find(params[:id])
-    @pin.update(params.require(:pin).permit(:title, :description))
+    @pin.update(pin_params)
     redirect_to @pin, notice: "Pin was Successfully update!"
   end
 
@@ -32,5 +32,11 @@ class PinsController < ApplicationController
     @pin = Pin.find(params[:id])
     @pin.destroy
     redirect_to root_path
+  end
+
+  private
+
+  def pin_params
+    params.require(:pin).permit(:title, :description, :image)
   end
 end
