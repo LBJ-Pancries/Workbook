@@ -31,6 +31,24 @@ class PostsController < ApplicationController
     render "like"
   end
 
+  def collect
+    @post = Post.find(params[:id])
+
+    if !current_user.is_collect_of?(@post) # 如果用户未收藏过此文
+      current_user.collect!(@post)
+    end
+  end
+
+  def cancel
+    @post = Post.find(params[:id])
+
+    if current_user.is_collect_of?(@post)
+      current_user.cancel!(@post)
+    end
+
+    render "collect"
+  end
+
   protected
 
   def post_params

@@ -1,0 +1,15 @@
+<% if current_user && current_user.is_collect_of?(post) %>
+
+  <label class="label label-success">已收藏</label>
+  <%= link_to cancel_post_path(post), method: :post, :remote => true do %>
+    <%= image_tag "collect.png" %>
+  <% end %>
+
+<% else %>
+
+  <label class="label label-warning">未收藏</label>
+  <%= link_to collect_post_path(post), method: :post, :remote => true do %>
+    <%= image_tag "cancel.png" %>
+  <% end %>
+
+<% end %>
