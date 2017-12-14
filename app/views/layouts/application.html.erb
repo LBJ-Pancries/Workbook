@@ -10,6 +10,24 @@
 
   <body>
     <div class="container">
+      <% if flash[:notice] %>
+        <%= flash[:notice] %>
+      <% end %>
+
+      <% if flash[:alert] %>
+        <%= flash[:alert] %>
+      <% end %>
+
+      <div class="navbar">
+        <% if current_user %>
+          <%= link_to('登入', destroy_user_session_path, :method => :delete) %>
+          <%= link_to('修改密码', edit_registration_path(:user)) %>
+        <% else %>
+          <%= link_to('注册', new_registration_path(:user)) %> |
+          <%= link_to('登入', new_session_path(:user)) %>
+        <% end %>
+      </div>
+
       <p>
         <%= link_to "jQuery 练习一", jquery_1_path %> |
         <%= link_to "jQuery 练习二", jquery_2_path %> |
